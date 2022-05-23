@@ -47,3 +47,5 @@ alter table produtos drop column obs;
 
 -- excluir a tabela 
 drop table produtos;
+
+select * from produtos; 

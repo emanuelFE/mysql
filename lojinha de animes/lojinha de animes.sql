@@ -28,9 +28,12 @@ unidade varchar (255) not null,
 localizacao varchar (255),
 custo decimal (10,2) not null,
 lucro decimal	(10,2),
-venda decimal(10,2)
+venda decimal(10,2),
+idfor int not null,
+foreign key (idfor) references fornecedores(idfor)
 );
-
+drop table produtos;
+describe produtos;
 
 insert into produtos(produto,quantidade,valor) 
  values ('manto da akatsuki','10','150.00');
@@ -208,3 +211,66 @@ value ('kevinho','95101-4939', 'kevinhosilva@gmail.com');
 describe produtos;
 
 update produtos set produto='caneta preta'where id=1;
+
+-- foregin key (FK) chave estrangeira que cria o relacionamento
+-- do tipo 1-N com a tabela clientes
+-- FK(pedidos)________PK(clientes)
+-- Observação: usar o mesmo nome e tipo de dados nas chaves (PK e FK)
+create table pedidos (
+pedido  int primary key auto_increment,
+dataped timestamp default current_timestamp,
+total decimal(10,2),
+idcli int not null,
+foreign key(idcli) references clientes(idcli)
+);
+
+select * from clientes;
+insert into clientes(nome,fone,marketing)
+values('emanoel silva','99999999','não');
+
+-- abertura de pedido 
+insert into pedidos(idcli) values(1);
+
+-- verificar o pedidos
+select * from pedidos where pedido;
+
+-- verificar pedidos juntos com o nome do cliente
+-- inner join(unir informações de 2 ou mais tabelas)
+-- IMPORTANTE! Indica as Chaves Fk e PK
+select * from pedidos inner join clientes on pedidos.idcli = clientes.idcli;
+
+-- verificar pedido junto com o nome do cliente ( relatorio simplificado)
+-- %H:%i exibir tambem o horario formatado
+select pedidos.pedido,date_format(pedidos.dataped,'%d/%m/%Y - %H:%i') as data_ped,clientes.nome as cliente,clientes.fone
+from pedidos inner join clientes on pedidos.idcli = clientes.idcli;
+
+create table fornecedores (
+idfor int primary key auto_increment,
+cnpj varchar(255) not null unique,
+ie varchar(255) unique,
+im varchar(255) unique,
+razao varchar (255) not null, 
+fantasia varchar (255) not null, 
+site varchar (255),    
+fone varchar (255) not null, 
+contato varchar (255),  
+email varchar (255),
+cep varchar (255) not null, 
+endereco varchar (255) not null, 
+numero varchar (255) not null, 
+complemento varchar (255),
+bairro varchar (255) not null, 
+cidade varchar (255) not null, 
+uf char (2) not null, 
+obs varchar (255)
+);
+describe fornecedores;
+
+
+insert into fornecedores
+(cnpj,razao,fantasia,fone,cep,endereco,numero,bairro,cidade,uf)
+values ('17.127.927/0001-99','Panini Comercio e Industria Grafica Ltda','Panini',
+'9999-1234','03307-000','Rua Tuiuti','2769','Tatuapé','São Paulo','SP');
+
+
+select * from fornecedores;
